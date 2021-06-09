@@ -31,11 +31,11 @@ def draw_dep_tree(UDtree):
     nx.draw_networkx_edge_labels(g, pos, edge_labels={edge:g.edges[edge]['deprel'] for edge in g.edges})
     plt.show()
 
-def generate_hashes(UDtrees):
+def generate_hashes(UDtrees, quiet=True):
     hashes = {}
     mostcommon = []
-    for sentence in tqdm(sentences):
-        hash_ = nx.weisfeiler_lehman_graph_hash(UD2Graph(sentence),edge_attr='deprel')
+    for sentence in (UDtrees if quiet else tqdm(UDtrees)):
+        hash_ = nx.weisfeiler_lehman_graph_hash(ud_2_graph(sentence),edge_attr='deprel')
         if hash_ not in hashes:
             hashes[hash_] = []
         hashes[hash_].append(sentence)
