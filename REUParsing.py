@@ -20,7 +20,7 @@ def ud_2_graph(tree, parent=1, graph=None):
         child_num = graph.number_of_nodes()
         graph.add_node(child_num, name=child.token['form'])
         graph.add_edge(parent, child_num, deprel=child.token['deprel'])
-        graph = UD2Graph(child, child_num, graph)
+        graph = ud_2_graph(child, child_num, graph)
     return graph
 
 def draw_dep_tree(UDtree):
@@ -46,4 +46,15 @@ def diversity(UDtrees):
     return len(hashes)/len(UDtrees)
 
 def compare_langs(langfile1, langfile2):
-    pass
+    lang1_sentences = load_sentences(langfile1)
+    lang2_sentences = load_sentences(langfile2)
+    lang1_hashes = generate_hashes(lang1_sentences)
+    lang2_hashes = generate_hashes(lang2_sentences)
+    sum_freq_lang1 = 0
+    sum_freq_overlap = 0
+    for hash1 in lang1_hashes:
+        hash1_freq = lang1_hashes[hash1]
+        sum_freq_lang1 += hash1_freq
+        if hash1 in lang2_hashes.keys():
+            sum_freq_overlap += hash1_freq
+    return sum_freq_overlap / sum_freq_lang1
