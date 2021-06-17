@@ -13,12 +13,12 @@ def load_sentences(file):
 def ud_2_graph(tree, parent=1, graph=None):
     if graph is None:
         graph = nx.Graph()
-        graph.add_node(graph.number_of_nodes(), name='root')
-        graph.add_node(graph.number_of_nodes(), name=tree.token['form'])
+        graph.add_node(graph.number_of_nodes(), name='root', upos='ROOT')
+        graph.add_node(graph.number_of_nodes(), name=tree.token['form'], upos=tree.token['upos'])
         graph.add_edge(0, parent, deprel='<root>')
     for child in tree.children:
         child_num = graph.number_of_nodes()
-        graph.add_node(child_num, name=child.token['form'])
+        graph.add_node(child_num, name=child.token['form'], upos=child.token['upos'])
         graph.add_edge(parent, child_num, deprel=child.token['deprel'])
         graph = ud_2_graph(child, child_num, graph)
     return graph
@@ -31,11 +31,11 @@ def draw_dep_tree(UDtree):
     nx.draw_networkx_edge_labels(g, pos, edge_labels={edge:g.edges[edge]['deprel'] for edge in g.edges})
     plt.show()
 
-def generate_hashes(UDtrees, quiet=True):
+def generate_hashes(UDtrees, edge_attr=None, node_attr=None, quiet=True):
     hashes = {}
     mostcommon = []
     for sentence in (UDtrees if quiet else tqdm(UDtrees)):
-        hash_ = nx.weisfeiler_lehman_graph_hash(ud_2_graph(sentence),edge_attr='deprel')
+        hash_ = nx.weisfeiler_lehman_graph_hash(ud_2_graph(sentence),edge_attr=edge_attr, node_attr=node_attr)
         if hash_ not in hashes:
             hashes[hash_] = []
         hashes[hash_].append(sentence)
@@ -46,15 +46,4 @@ def diversity(UDtrees):
     return len(hashes)/len(UDtrees)
 
 def compare_langs(langfile1, langfile2):
-    lang1_sentences = load_sentences(langfile1)
-    lang2_sentences = load_sentences(langfile2)
-    lang1_hashes = generate_hashes(lang1_sentences)
-    lang2_hashes = generate_hashes(lang2_sentences)
-    sum_freq_lang1 = 0
-    sum_freq_overlap = 0
-    for hash1 in lang1_hashes:
-        hash1_freq = lang1_hashes[hash1]
-        sum_freq_lang1 += hash1_freq
-        if hash1 in lang2_hashes.keys():
-            sum_freq_overlap += hash1_freq
-    return sum_freq_overlap / sum_freq_lang1
+    pass
