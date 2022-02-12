@@ -4,8 +4,8 @@
 This contains many of the utility functions that we rely on for parsing and hashing CoNLL-U trees.
 <Add explanations of these functions>
 
-## \<Hashing stuff from hard drive\>: UPDATE THIS
-Make the hash dictionaries...
+## GenerateHashFiles.py:
+This builds a dictionary with the hashes for each language in Universal Dependencies.
 
 ## SplitHashes.py:
 This splits the leaky and non-leaky hashes from the train, dev, and test hash dictionaries.
