@@ -16,12 +16,15 @@ This contains the functions to calculate a variety of types of leakage within an
 It merges the hash dictionaries for languages used specifically in UDify. It computes the cross treebank leakage on these languages using ComputeLeakage.py.
 
 ## Regress_From_Dictionaries.py
-
+This is the main experiment which uses code from Søgaard to compute the explained variance and other measures on the leakage dictionaries created.
 
 ## Score Data:
 
 ### ud_spreadsheet.tsv
+This is Søgaard's original spreadsheet with scores from each of the language models.
 
 ### UDify-Scores.tsv
+This is the spreadsheet that has scores from UDify on various languages.
 
 ### UDPipe-Scores.tsv
+This is the spreadsheet that has scores from UDPipe on various languages.
